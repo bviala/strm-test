@@ -59,9 +59,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+$background-color: lightcyan;
+
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
+  background: $background-color;
 }
 
 #app {
@@ -71,7 +78,6 @@ body {
   color: #2c3e50;
 
   padding: 2rem 1rem;
-  background: lightcyan;
   display: flex;
   justify-content: center;
 }
