@@ -1,15 +1,23 @@
 <template>
-  <div />
+  <main>
+    <Article
+      v-for="article in articles"
+      :key="article.id"
+      :article="article"
+    />
+  </main>
 </template>
 
 <script>
 import { getArticles } from '@/api/articles'
+import Article from '@/components/Article.vue'
 
 const PAGE_SIZE = 10
 
 export default {
   name: 'App',
   components: {
+    Article
   },
   data () {
     return {
@@ -19,8 +27,8 @@ export default {
   },
   created () {
     getArticles(this.nextPageToFetch, PAGE_SIZE)
-      .then(res => {
-        console.log(res)
+      .then(result => {
+        this.articles = result
       })
       .catch(error => {
         console.error(error)
@@ -30,12 +38,22 @@ export default {
 </script>
 
 <style>
+body {
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+  padding: 2rem 1rem;
+  background: lightcyan;
+  display: flex;
+  justify-content: center;
+}
+main {
+  max-width: 800px;
 }
 </style>
