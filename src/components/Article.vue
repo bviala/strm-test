@@ -87,17 +87,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$border-color: lightgray;
-$text-light: gray;
-$link-hover-color: lightseagreen;
-$highlight-color: lightpink;
-$text-medium: darkslateblue;
-
 .article {
-  background: white;
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  padding: .25rem 2rem;
+  background: $card-background;
+  border: 1px solid $card-border-color;
+  border-radius: $card-border-radius;
+  padding: $card-padding;
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
@@ -118,7 +112,7 @@ $text-medium: darkslateblue;
       font-style: italic;
     }
     p ::v-deep em {
-      background: $highlight-color;
+      background: $text-highlight-color;
     }
   }
 
@@ -127,7 +121,7 @@ $text-medium: darkslateblue;
     text-decoration: none;
     color: inherit;
     &:hover {
-      color: $link-hover-color;
+      color: $primary;
     }
   }
 
