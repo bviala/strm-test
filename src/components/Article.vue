@@ -4,19 +4,48 @@
       <p>{{ article.source.name }}</p>
       <!-- <img :src="article.source.logo_url"> --> <!-- TODO: source logo implemention -->
     </div>
-    <a :href="article.url">{{ article.title }}</a>
+    <a
+      :href="article.url"
+      target="_blank"
+    >{{ article.title }}</a>
     <p
       v-if="displayedAuthor"
       class="article__author"
     >
       by {{ displayedAuthor }}
     </p>
-    <p class="article__word-count">
-      {{ article.word_count }} words
-    </p>
-    <p class="article__date">
-      {{ formattedPublicationDate }} at {{ formattedPublicationTime }}
-    </p>
+
+    <div
+      v-if="article.excerpts.length"
+      class="article__excerpts"
+    >
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <p v-html="article.excerpts[0].text" />
+      <button
+        v-if="additionalExcerpts"
+        @click="toggleAdditionalExcerpts"
+      >
+        {{ showAdditionalExcerpts ? 'less' : 'more excerpts' }}
+      </button>
+      <div v-if="showAdditionalExcerpts">
+        <!-- eslint-disable -->
+          <p
+            v-for="(excerpt, index) in additionalExcerpts"
+            :key="index"
+            v-html="excerpt.text"
+          />
+          <!-- eslint-enable -->
+      </div>
+    </div>
+
+    <div class="article__footer">
+      <p class="article__date">
+        {{ formattedPublicationDate }} at {{ formattedPublicationTime }}
+      </p>
+      <p class="article__word-count">
+        {{ article.word_count }} words
+      </p>
+    </div>
   </div>
 </template>
 
@@ -30,6 +59,11 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      showAdditionalExcerpts: false
+    }
+  },
   computed: {
     formattedPublicationDate () {
       return dayjs(this.article.published_at).format('dddd D MMMM YYYY')
@@ -39,6 +73,14 @@ export default {
     },
     displayedAuthor () {
       return this.article.author.name !== this.article.source.name ? this.article.author.name : null
+    },
+    additionalExcerpts () {
+      return this.article.excerpts.length > 1 ? this.article.excerpts.slice(1) : null
+    }
+  },
+  methods: {
+    toggleAdditionalExcerpts () {
+      this.showAdditionalExcerpts = !this.showAdditionalExcerpts
     }
   }
 }
@@ -46,8 +88,10 @@ export default {
 
 <style lang="scss" scoped>
 $border-color: lightgray;
-$text-details-color: gray;
+$text-light: gray;
 $link-hover-color: lightseagreen;
+$highlight-color: lightpink;
+$text-medium: darkslateblue;
 
 .article {
   background: white;
@@ -60,7 +104,22 @@ $link-hover-color: lightseagreen;
 
   .article__source, .article__author, .article__date, .article__word-count {
     font-size: .875rem;
-    color: $text-details-color;
+    color: $text-light;
+  }
+
+  .article__footer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .article__excerpts {
+    color: $text-medium;
+    p {
+      font-style: italic;
+    }
+    p ::v-deep em {
+      background: $highlight-color;
+    }
   }
 
   a {
@@ -71,5 +130,6 @@ $link-hover-color: lightseagreen;
       color: $link-hover-color;
     }
   }
+
 }
 </style>
