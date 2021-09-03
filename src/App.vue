@@ -1,23 +1,33 @@
 <template>
   <main>
-    <Article
+    <!-- <Article
       v-for="article in articles"
       :key="article.id"
       :article="article"
-    />
+    /> -->
+    <InfiniteScroll
+      :items="articles"
+      @intersect="fetchNextPage"
+    >
+      <template #default="slotProps">
+        <Article :article="slotProps.item" />
+      </template>
+    </InfiniteScroll>
   </main>
 </template>
 
 <script>
 import { getArticles } from '@/api/articles'
 import Article from '@/components/Article.vue'
+import InfiniteScroll from '@/components/InfiniteScroll.vue'
 
 const PAGE_SIZE = 10
 
 export default {
   name: 'App',
   components: {
-    Article
+    Article,
+    InfiniteScroll
   },
   data () {
     return {
@@ -25,14 +35,17 @@ export default {
       nextPageToFetch: 1
     }
   },
-  created () {
-    getArticles(this.nextPageToFetch, PAGE_SIZE)
-      .then(result => {
-        this.articles = result
-      })
-      .catch(error => {
-        console.error(error)
-      })
+  methods: {
+    fetchNextPage (entries) {
+      getArticles(this.nextPageToFetch, PAGE_SIZE)
+        .then(result => {
+          this.articles = [...this.articles, ...result]
+          this.nextPageToFetch++
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    }
   }
 }
 </script>
