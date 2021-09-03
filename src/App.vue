@@ -1,12 +1,8 @@
 <template>
   <main>
-    <!-- <Article
-      v-for="article in articles"
-      :key="article.id"
-      :article="article"
-    /> -->
     <InfiniteScroll
       :items="articles"
+      :is-fetching="isFetching"
       @intersect="fetchNextPage"
     >
       <template #default="slotProps">
@@ -32,18 +28,31 @@ export default {
   data () {
     return {
       articles: [],
-      nextPageToFetch: 1
+      nextPageToFetch: 1,
+      isFetching: false,
+      hasFetchedAll: false
     }
   },
   methods: {
-    fetchNextPage (entries) {
+    fetchNextPage () {
+      if (this.hasFetchedAll) return
+
+      this.isFetching = true
+
       getArticles(this.nextPageToFetch, PAGE_SIZE)
         .then(result => {
-          this.articles = [...this.articles, ...result]
-          this.nextPageToFetch++
+          if (result.length) {
+            this.articles = [...this.articles, ...result]
+            this.nextPageToFetch++
+          } else {
+            this.hasFetchedAll = true
+          }
         })
         .catch(error => {
           console.error(error)
+        })
+        .finally(() => {
+          this.isFetching = false
         })
     }
   }
