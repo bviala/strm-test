@@ -88,7 +88,6 @@ export default {
 <style lang="scss" scoped>
 .article {
   background: $card-background;
-  border: 1px solid $border-color;
   border-radius: $card-border-radius;
   padding: $card-padding;
   &:not(:last-child) {

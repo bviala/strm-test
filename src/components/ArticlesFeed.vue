@@ -2,6 +2,7 @@
   <div
     v-for="(dayArticles, dayDisplayableDate) in groupedByDayArticles"
     :key="dayDisplayableDate"
+    class="articles"
   >
     <h1>{{ dayDisplayableDate }}</h1>
     <Article
@@ -77,11 +78,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
-  position: sticky;
-  top: 0;
-  padding: 1rem 0;
-  margin: 0;
-  background: $background-color;
+$h1-v-margin: 1.5rem;
+
+.articles {
+  >:nth-child(2) {
+    margin-top: $h1-v-margin; /* Workaround: setting a margin-bottom on the h1 makes its sticky behavior buggy */
+  }
+  h1 {
+    position: sticky;
+    top: 0;
+    padding: 1rem 2rem;
+    margin: $h1-v-margin 0 0 0;
+    background: white;
+    border-bottom: 3px solid $primary;
+  }
 }
 </style>

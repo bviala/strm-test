@@ -21,6 +21,7 @@ html, body {
 body {
   margin: 0;
   background: $background-color;
+  background-attachment: fixed;
 }
 
 #app {
