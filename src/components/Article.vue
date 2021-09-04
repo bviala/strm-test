@@ -1,19 +1,29 @@
 <template>
   <div class="article">
-    <div class="article__source">
-      <p>{{ article.source.name }}</p>
+    <div class="article__header">
+      <div class="article__source">
+        <p>{{ article.source.name }}</p>
       <!-- <img :src="article.source.logo_url"> --> <!-- TODO: source logo implemention -->
+      </div>
+      <p class="article__date">
+        {{ formattedPublicationTime }}
+      </p>
     </div>
     <a
       :href="article.url"
       target="_blank"
     >{{ article.title }}</a>
-    <p
-      v-if="displayedAuthor"
-      class="article__author"
-    >
-      by {{ displayedAuthor }}
-    </p>
+    <div>
+      <span
+        v-if="displayedAuthor"
+        class="article__author"
+      >
+        by {{ displayedAuthor }} &nbsp;&mdash;&nbsp;
+      </span>
+      <span class="article__word-count">
+        {{ article.word_count }} words
+      </span>
+    </div>
 
     <div
       v-if="article.excerpts.length"
@@ -38,15 +48,6 @@
         </template>
       </div>
     </div>
-
-    <div class="article__footer">
-      <p class="article__date">
-        {{ formattedPublicationDate }} at {{ formattedPublicationTime }}
-      </p>
-      <p class="article__word-count">
-        {{ article.word_count }} words
-      </p>
-    </div>
   </div>
 </template>
 
@@ -66,9 +67,6 @@ export default {
     }
   },
   computed: {
-    formattedPublicationDate () {
-      return dayjs(this.article.published_at).format('dddd D MMMM YYYY')
-    },
     formattedPublicationTime () {
       return dayjs(this.article.published_at).format('h:mm')
     },
@@ -102,9 +100,16 @@ export default {
     color: $text-light;
   }
 
-  .article__footer {
+  .article__header {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    > :first-child {
+      margin-right: 1rem;
+    }
+    p {
+      margin-top: 0;
+    }
   }
 
   .article__excerpts {
