@@ -1,9 +1,15 @@
 <template>
-  <Article
-    v-for="(article, index) in articles"
-    :key="index"
-    :article="article"
-  />
+  <div
+    v-for="(dayArticles, dayDisplayableDate) in groupedByDayArticles"
+    :key="dayDisplayableDate"
+  >
+    <h1>{{ dayDisplayableDate }}</h1>
+    <Article
+      v-for="(article, index) in dayArticles"
+      :key="index"
+      :article="article"
+    />
+  </div>
   <Spinner />
   <IntersectionObserver
     @intersect="fetchNextPage"
@@ -11,7 +17,10 @@
 </template>
 
 <script>
-import { getArticles } from '@/api/articles'
+import dayjs from 'dayjs'
+
+import { getArticles, fakeArticle } from '@/api/articles'
+
 import Article from '@/components/Article.vue'
 import IntersectionObserver from '@/components/IntersectionObserver.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -26,10 +35,19 @@ export default {
   },
   data () {
     return {
-      articles: [],
+      articles: [...fakeArticle], // testing sticky headings
       nextPageToFetch: 1,
       isFetching: false,
       hasFetchedAll: false
+    }
+  },
+  computed: {
+    groupedByDayArticles () {
+      return this.articles.reduce((accumulator, current) => {
+        const displayableDate = dayjs(current.published_at).format('dddd D MMMM')
+        accumulator[displayableDate] = accumulator[displayableDate] ? [...accumulator[displayableDate], current] : [current]
+        return accumulator
+      }, {})
     }
   },
   methods: {
@@ -57,3 +75,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+h1 {
+  position: sticky;
+  top: 0;
+  padding: 1rem 0;
+  background: $background-color;
+}
+</style>
