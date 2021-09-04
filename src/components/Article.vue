@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     formattedPublicationTime () {
-      return dayjs(this.article.published_at).format('h:mm')
+      return dayjs(this.article.published_at).format('h:mma')
     },
     displayedAuthor () {
       return this.article.author.name !== this.article.source.name ? this.article.author.name : null
