@@ -1,61 +1,15 @@
 <template>
   <main>
-    <InfiniteScroll
-      :items="articles"
-      :is-fetching="isFetching"
-      @intersect="fetchNextPage"
-    >
-      <template #default="slotProps">
-        <Article :article="slotProps.item" />
-      </template>
-    </InfiniteScroll>
+    <ArticlesFeed />
   </main>
 </template>
 
 <script>
-import { getArticles } from '@/api/articles'
-import Article from '@/components/Article.vue'
-import InfiniteScroll from '@/components/InfiniteScroll.vue'
-
-const PAGE_SIZE = 10
+import ArticlesFeed from '@/components/ArticlesFeed'
 
 export default {
   name: 'App',
-  components: {
-    Article,
-    InfiniteScroll
-  },
-  data () {
-    return {
-      articles: [],
-      nextPageToFetch: 1,
-      isFetching: false,
-      hasFetchedAll: false
-    }
-  },
-  methods: {
-    fetchNextPage () {
-      if (this.hasFetchedAll) return
-
-      this.isFetching = true
-
-      getArticles(this.nextPageToFetch, PAGE_SIZE)
-        .then(result => {
-          if (result.length) {
-            this.articles = [...this.articles, ...result]
-            this.nextPageToFetch++
-          } else {
-            this.hasFetchedAll = true
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-        .finally(() => {
-          this.isFetching = false
-        })
-    }
-  }
+  components: { ArticlesFeed }
 }
 </script>
 
