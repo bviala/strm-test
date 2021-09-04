@@ -25,16 +25,17 @@
         v-if="additionalExcerpts"
         @click="toggleAdditionalExcerpts"
       >
-        {{ showAdditionalExcerpts ? 'less' : 'more excerpts' }}
+        {{ showAdditionalExcerpts ? 'hide' : 'more' }}
       </button>
       <div v-if="showAdditionalExcerpts">
-        <!-- eslint-disable -->
-          <p
-            v-for="(excerpt, index) in additionalExcerpts"
-            :key="index"
-            v-html="excerpt.text"
-          />
-          <!-- eslint-enable -->
+        <template
+          v-for="(excerpt, index) in additionalExcerpts"
+          :key="index"
+        >
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <p v-html="excerpt.text" />
+          <hr>
+        </template>
       </div>
     </div>
 
@@ -89,7 +90,7 @@ export default {
 <style lang="scss" scoped>
 .article {
   background: $card-background;
-  border: 1px solid $card-border-color;
+  border: 1px solid $border-color;
   border-radius: $card-border-radius;
   padding: $card-padding;
   &:not(:last-child) {
@@ -110,9 +111,30 @@ export default {
     color: $text-medium;
     p {
       font-style: italic;
+      margin: .5rem 0;
     }
     p ::v-deep em {
       background: $text-highlight-color;
+    }
+    button {
+      border: 1px solid $border-color;
+      border-radius: 2px;
+      background: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: .75rem;
+      &:hover {
+        background: lightgray;
+      }
+    }
+
+    hr {
+      margin: 0;
+      &:last-child {
+        display: none;
+      }
+      color: $background-color;
+      width: 100px;
     }
   }
 
