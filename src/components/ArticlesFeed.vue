@@ -10,7 +10,7 @@
       :article="article"
     />
   </div>
-  <Spinner />
+  <Spinner v-if="!hasFetchedAll" />
   <IntersectionObserver
     @intersect="fetchNextPage"
   />
