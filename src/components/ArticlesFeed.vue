@@ -4,7 +4,10 @@
     :key="date"
     class="articles-group"
   >
-    <div class="articles-group__date">
+    <div
+      class="articles-group__date"
+      @click="toggleStickyTesting"
+    >
       {{ date }}
     </div>
     <div class="articles-group__articles">
@@ -46,16 +49,20 @@ export default {
   },
   data () {
     return {
-      articles: [...fakeArticle], // testing sticky headings
+      articles: [],
       nextPageToFetch: 1,
       isFetching: false,
       hasFetchedAll: false,
-      hasFetchingError: false
+      hasFetchingError: false,
+      isStickyTesting: false
     }
   },
   computed: {
+    displayedArticles () {
+      return this.isStickyTesting ? [...fakeArticle, ...this.articles] : this.articles
+    },
     groupedByDayArticles () {
-      return this.articles.reduce((accumulator, current) => {
+      return this.displayedArticles.reduce((accumulator, current) => {
         const displayableDate = dayjs(current.published_at).format('dddd[daniel]D MMMM').replace('daniel', '\n')
         accumulator[displayableDate] = accumulator[displayableDate] ? [...accumulator[displayableDate], current] : [current]
         return accumulator
@@ -84,6 +91,9 @@ export default {
         .finally(() => {
           this.isFetching = false
         })
+    },
+    toggleStickyTesting () {
+      this.isStickyTesting = !this.isStickyTesting
     }
   }
 }
