@@ -15,7 +15,13 @@
       />
     </div>
   </div>
-  <Spinner v-if="!hasFetchedAll" />
+  <Spinner v-if="!hasFetchedAll && !hasFetchingError" />
+  <p
+    v-if="hasFetchingError"
+    class="error"
+  >
+    Something went wrong... please try refreshing the page
+  </p>
   <IntersectionObserver
     @intersect="fetchNextPage"
   />
@@ -43,7 +49,8 @@ export default {
       articles: [...fakeArticle], // testing sticky headings
       nextPageToFetch: 1,
       isFetching: false,
-      hasFetchedAll: false
+      hasFetchedAll: false,
+      hasFetchingError: false
     }
   },
   computed: {
@@ -72,6 +79,7 @@ export default {
         })
         .catch(error => {
           console.error(error)
+          this.hasFetchingError = true
         })
         .finally(() => {
           this.isFetching = false
@@ -110,5 +118,13 @@ $h1-v-margin: 1.5rem;
       border: none;
     }
   }
+}
+.error {
+  padding: 1rem 2rem;
+  color: red;
+  background: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
