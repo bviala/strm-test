@@ -2,7 +2,7 @@
   <div class="article">
     <div class="article__header">
       <div class="article__source">
-        <p>{{ article.source.name }}</p>
+        <p>{{ article.source?.name }}</p>
       <!-- <img :src="article.source.logo_url"> --> <!-- TODO: source logo implemention -->
       </div>
       <p class="article__date">
@@ -26,7 +26,7 @@
     </div>
 
     <div
-      v-if="article.excerpts.length"
+      v-if="article.excerpts?.length"
       class="article__excerpts"
     >
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -71,10 +71,10 @@ export default {
       return dayjs(this.article.published_at).format('h:mma')
     },
     displayedAuthor () {
-      return this.article.author.name !== this.article.source.name ? this.article.author.name : null
+      return this.article.author?.name !== this.article.source?.name ? this.article.author?.name : null
     },
     additionalExcerpts () {
-      return this.article.excerpts.length > 1 ? this.article.excerpts.slice(1) : null
+      return this.article.excerpts?.length > 1 ? this.article.excerpts?.slice(1) : null
     }
   },
   methods: {
