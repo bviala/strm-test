@@ -35,6 +35,6 @@ body {
   justify-content: center;
 }
 main {
-  max-width: 800px;
+  max-width: 1000px;
 }
 </style>

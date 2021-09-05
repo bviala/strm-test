@@ -1,15 +1,19 @@
 <template>
   <div
-    v-for="(dayArticles, dayDisplayableDate) in groupedByDayArticles"
-    :key="dayDisplayableDate"
-    class="articles"
+    v-for="(articlesGroup, date) in groupedByDayArticles"
+    :key="date"
+    class="articles-group"
   >
-    <h1>{{ dayDisplayableDate }}</h1>
-    <Article
-      v-for="(article, index) in dayArticles"
-      :key="index"
-      :article="article"
-    />
+    <div class="articles-group__date">
+      {{ date }}
+    </div>
+    <div class="articles-group__articles">
+      <Article
+        v-for="(article, index) in articlesGroup"
+        :key="index"
+        :article="article"
+      />
+    </div>
   </div>
   <Spinner v-if="!hasFetchedAll" />
   <IntersectionObserver
@@ -45,7 +49,7 @@ export default {
   computed: {
     groupedByDayArticles () {
       return this.articles.reduce((accumulator, current) => {
-        const displayableDate = dayjs(current.published_at).format('dddd D MMMM')
+        const displayableDate = dayjs(current.published_at).format('dddd[daniel]D MMMM').replace('daniel', '\n')
         accumulator[displayableDate] = accumulator[displayableDate] ? [...accumulator[displayableDate], current] : [current]
         return accumulator
       }, {})
@@ -80,17 +84,30 @@ export default {
 <style lang="scss" scoped>
 $h1-v-margin: 1.5rem;
 
-.articles {
+.articles-group {
   >:nth-child(2) {
-    margin-top: $h1-v-margin; /* Workaround: setting a margin-bottom on the h1 makes its sticky behavior buggy */
+    margin-top: $h1-v-margin; /* Workaround: setting a margin-bottom on the title makes its sticky behavior buggy */
   }
-  h1 {
+  .articles-group__date {
     position: sticky;
     top: 0;
     padding: 1rem 2rem;
     margin: $h1-v-margin 0 0 0;
     background: white;
     border-bottom: 3px solid $primary;
+    font-size: 1.5rem;
+  }
+
+  @include desktop {
+    display: flex;
+    .articles-group__date {
+      align-self: flex-start;
+      margin-right: 2rem;
+      flex-basis: 170px;
+      flex-shrink: 0;
+      top: 2rem;
+      white-space: pre;
+    }
   }
 }
 </style>

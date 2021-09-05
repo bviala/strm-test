@@ -19,3 +19,10 @@ $text-default: #041918;
 $text-light: gray;
 $text-medium: darkslateblue;
 $text-highlight-color: #FFE5E9;
+
+/* Mixins */
+@mixin desktop {
+  @media screen and (min-width: 1024px) {
+    @content;
+  }
+}
