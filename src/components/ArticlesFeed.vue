@@ -107,6 +107,7 @@ $h1-v-margin: 1.5rem;
       flex-shrink: 0;
       top: 2rem;
       white-space: pre;
+      border: none;
     }
   }
 }
