@@ -12,6 +12,14 @@ https://strm-test.surge.sh/
 
 The inconsistent size of the logos could hinder the perceived quality of the UI, so I decided not to include them. Logos are not crucial so these two issues can be further investigated in the future.
 
+## Improvements
+
+### Duplicated articles
+Some articles appear twice in the feed, from different sources. If it makes sense from the product perpective we could filter these duplicates based on the title. 
+
+## Sticky dates
+
+Clicking on the date will add a fake article dated May 6, so that you can better visualize the sticky dates implementation. Click again to remove.
 
 ## Project setup
 ```
